@@ -4,17 +4,10 @@ on:
   push:
     branches:
 jobs:
-  linter:
+  lint-markdown:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: "recursive"
-
-      - name: Lint Dockerfile
-        uses: brpaz/hadolint-action@master
-        with:
-          dockerfile: "pitch/Dockerfile"
 
       - name: markdownlint-cli
         uses: nosborn/github-action-markdown-cli@v1.1.1
@@ -22,7 +15,27 @@ jobs:
           files: .
           config_file: ".markdownlint.yaml"
           ignore_files: "{**/pitch/themes/**,**/node_modules/**}"
-  build:
+  lint-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Lint Dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: "pitch/Dockerfile"
+  lint-helm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: install helm3
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      - name: Helm Lint
+        run: |
+          helm lint cicd-pitch
+  tst-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
@@ -43,18 +56,8 @@ jobs:
       - name: Install dependencies
         run: |
           cd ./tests && go test -v -run TestDockerElevatorPitch
-  helmlint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: install helm3
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-      - name: Helm Lint
-        run: |
-          helm lint cicd-pitch
-  helm:
+
+  tst-help:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
