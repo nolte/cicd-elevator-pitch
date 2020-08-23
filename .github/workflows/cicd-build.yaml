@@ -94,6 +94,9 @@ jobs:
       - name: Starting the Kind Cluster
         run: |
           echo "::set-env name=TEST_IMAGE::$(skaffold build -o '{{json .}}' -q | jq '.builds[].tag' -r)"
+      - name: add the image to kind node
+        run: |
+          kind load docker-image ${{ env.TEST_IMAGE }}
 
       - name: Install dependencies
         run: |
