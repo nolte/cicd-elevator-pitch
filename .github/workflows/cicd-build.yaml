@@ -60,9 +60,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      - name: Starting the Kind Cluster
+        run: |
+          sudo apt-get install -y jq
+
       - name: install helm3
         run: |
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      - name: install skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+          sudo install skaffold /usr/local/bin/
 
       # https://github.com/engineerd/setup-kind
       - uses: engineerd/setup-kind@v0.4.0
@@ -83,10 +91,13 @@ jobs:
           echo "current-context:" $(kubectl config current-context)
           echo "environment-kubeconfig:" ${KUBECONFIG}
 
-      - name: Run Skaffold pipeline
-        uses: hiberbee/github-action-skaffold@latest
-        with:
-          command: build
+      - name: Starting the Kind Cluster
+        run: |
+          echo "::set-env name=SKAFFOLDBUILD::$(skaffold build -o '{{json .}}' -q)
+      #- name: Run Skaffold pipeline
+      #  uses: hiberbee/github-action-skaffold@latest
+      #  with:
+      #    command: build
       #- name: Install dependencies
       #  run: |
       #    cd ./tests && go test -v -run TestDockerElevatorPitch
