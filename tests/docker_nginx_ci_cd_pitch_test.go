@@ -29,8 +29,8 @@ func TestDockerElevatorPitch(t *testing.T) {
 	}
 	optsStop := &docker.StopOptions{}
 
-	containerId := docker.RunAndGetID(t, tag, opts)
-	defer docker.Stop(t, []string{containerId}, optsStop)
+	containerID := docker.RunAndGetID(t, tag, opts)
+	defer docker.Stop(t, []string{containerID}, optsStop)
 	tlsConfig := tls.Config{}
 
 	http_helper.HttpGetWithRetryWithCustomValidation(
