@@ -93,7 +93,11 @@ jobs:
 
       - name: Starting the Kind Cluster
         run: |
-          echo "::set-env name=SKAFFOLDBUILD::$(skaffold build -o '{{json .}}' -q)"
+          echo "::set-env name=TEST_IMAGE::$(skaffold build -o '{{json .}}' -q | jq '.builds[].tag' -r)"
+
+      - name: Install dependencies
+        run: |
+          cd ./tests && go test -v -run TestHelmCiCdPitchDeployment
       #- name: Run Skaffold pipeline
       #  uses: hiberbee/github-action-skaffold@latest
       #  with:

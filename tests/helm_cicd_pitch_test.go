@@ -43,11 +43,21 @@ func TestHelmCiCdPitchDeployment(t *testing.T) {
 	// - containerImageRepo=nginx
 	// - containerImageTag=1.15.8
 
-	ingressEndpoint := fmt.Sprintf("cicd-pitch-%s.172-17-0-1.sslip.io", namespaceName)
+	env := os.GetEnv("INGRESS_DOMAIN")
+	if env == "" {
+		env == "172-17-0-1.sslip.io"
+	}
+
+	image := os.GetEnv("TEST_IMAGE")
+	if image == "" {
+		image == "nolte/cicd-pitch:local"
+	}
+
+	ingressEndpoint := fmt.Sprintf("cicd-pitch-%s.%s", namespaceName, env)
 	options := &helm.Options{
 		KubectlOptions: kubectlOptions,
 		SetValues: map[string]string{
-			"image":                     "nolte/cicd-pitch:1a89e17ad0f11ee86558e737175117e6919bcd6afe0981a2d8646ad920600e25",
+			"image":                     image,
 			"ingress.enabled":           "true",
 			"ingress.hosts[0].host":     ingressEndpoint,
 			"ingress.hosts[0].paths[0]": "/",
