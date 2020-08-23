@@ -1,0 +1,17 @@
+apiVersion: skaffold/v2beta6 # 	version of the configuration.
+kind: Config
+build:
+  artifacts:
+    - image: nolte/cicd-pitch
+      context: pitch/.
+  local:
+    useDockerCLI: false
+    useBuildkit: false
+deploy:
+  helm:
+    releases:
+      - name: my-release
+        chartPath: ./cicd-pitch
+        artifactOverrides:
+          image: nolte/cicd-pitch # no tag present!
+          # Skaffold continuously tags your image, so no need to put one here.

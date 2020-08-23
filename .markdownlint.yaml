@@ -1,0 +1,8 @@
+---
+default: true
+no-hard-tabs: false
+whitespace: false
+MD013:
+  line_length: 160
+MD003:
+  style: atx

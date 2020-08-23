@@ -1,0 +1,70 @@
+{
+    "name": "cicd-elevator-pitch",
+    "dockerComposeFile": [
+        "docker-compose.yml"
+    ],
+    "service": "vscode",
+    "runServices": [
+        "vscode"
+    ],
+    "mounts": [
+        "source=cicd-elevator-pitch-vol,target=/home/vscode/.vscode-server/extensions,type=volume",
+        // And/or for VS Code Insiders
+        "source=cicd-elevator-pitch-vol-insiders,target=/home/vscode/.vscode-server-insiders/extensions,type=volume",
+    ],
+    "shutdownAction": "stopCompose",
+    "postCreateCommand": "chmod -R 700 .git",
+    "workspaceFolder": "/go/src/github.com/nolte/cicd-elevator-pitch",
+    "extensions": [
+        "alefragnani.Bookmarks",
+        "bierner.emojisense",
+        "bierner.github-markdown-preview",
+        "christian-kohler.path-intellisense",
+        "cschleiden.vscode-github-actions",
+        "davidanson.vscode-markdownlint",
+        "docsmsft.docs-article-templates",
+        //"docsmsft.docs-markdown",
+        "eamodio.gitlens",
+        "EditorConfig.EditorConfig",
+        "golang.go",
+        "Gruntfuggly.todo-tree",
+        "HashiCorp.terraform",
+        "hbenl.vscode-test-explorer",
+        "IBM.output-colorizer",
+        "jrebocho.vscode-random",
+        //"mervin.markdown-formatter",
+        "mhutchie.git-graph",
+        "mohsen1.prettify-json",
+        "ms-azuretools.vscode-docker",
+        "ms-kubernetes-tools.kind-vscode",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "owenfarrell.vscode-vault",
+        "pascalreitermann93.vscode-yaml-sort",
+        "quicktype.quicktype",
+        "redhat.vscode-yaml",
+        "samuelcolvin.jinjahtml",
+        "shardulm94.trailing-spaces",
+        "spikespaz.vscode-smoothtype",
+        "stkb.rewrap",
+        "tyriar.sort-lines",
+        "vscode-ext.sync-rsync",
+        "vscode-icons-team.vscode-icons",
+        "vscoss.vscode-ansible",
+        "tehnix.vscode-tidymarkdown"
+],
+    "settings": {
+        "editor.formatOnSave": true,
+        // General settings
+        "editor.renderWhitespace": "all",
+        // Docker
+        "remote.extensionKind": {
+            "ms-azuretools.vscode-docker": "workspace"
+        },
+        "python.pythonPath": "/home/vscode/.virtualenvs/development/bin/python",
+        "python.terminal.activateEnvInCurrentTerminal": true,
+        "markdownFormatter.spaceAfterFullWidthOrHalfWidth": "， -",
+        "[markdown]": {
+            "editor.formatOnSave": false
+          }
+    }
+}
