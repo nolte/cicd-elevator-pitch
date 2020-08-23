@@ -63,6 +63,26 @@ jobs:
       - name: install helm3
         run: |
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+      # https://github.com/engineerd/setup-kind
+      - uses: engineerd/setup-kind@v0.4.0
+        with:
+          skipClusterCreation: true
+
+      - name: Starting the Kind Cluster
+        run: |
+          go run mage.go -v kind:recreate
+
+      - name: configure kind kubeconfig
+        run: |
+          kind export kubeconfig
+          kubectl cluster-info
+          kubectl get pods -n kube-system
+          NODEDNSNAME=$(kubectl get nodes -ojson | jq '.items[0].status.addresses[0].address' -r | sed 's/\./-/g')
+          echo "::set-env name=INGRESS_DOMAIN::${NODEDNSNAME}.sslip.io"
+          echo "current-context:" $(kubectl config current-context)
+          echo "environment-kubeconfig:" ${KUBECONFIG}
+
       - name: Run Skaffold pipeline
         uses: hiberbee/github-action-skaffold@latest
         with:
