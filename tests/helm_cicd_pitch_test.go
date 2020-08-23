@@ -44,14 +44,14 @@ func TestHelmCiCdPitchDeployment(t *testing.T) {
 	// - containerImageRepo=nginx
 	// - containerImageTag=1.15.8
 
-	env := os.GetEnv("INGRESS_DOMAIN")
+	env := os.Getenv("INGRESS_DOMAIN")
 	if env == "" {
-		env == "172-17-0-1.sslip.io"
+		env = "172-17-0-1.sslip.io"
 	}
 
-	image := os.GetEnv("TEST_IMAGE")
+	image := os.Getenv("TEST_IMAGE")
 	if image == "" {
-		image == "nolte/cicd-pitch:local"
+		image = "nolte/cicd-pitch:local"
 	}
 
 	ingressEndpoint := fmt.Sprintf("cicd-pitch-%s.%s", namespaceName, env)
