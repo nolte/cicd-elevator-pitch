@@ -3,6 +3,7 @@ package test
 import (
 	"crypto/tls"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
